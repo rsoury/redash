@@ -30,3 +30,4 @@ client/cypress/videos
 
 # Additionals
 data
+yarn-error.log
