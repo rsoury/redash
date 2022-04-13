@@ -2,7 +2,8 @@
 # This script setups dockerized Redash on Ubuntu 18.04.
 set -eu
 
-REDASH_BASE_PATH=/opt/redash
+REDASH_BASE_PATH=redash-setup
+# REDASH_BRANCH=a16f551e22c6288df6f067aa12caa5afd9a8f1dd # v8.0.0
 
 install_docker(){
     # Install Docker
@@ -23,7 +24,7 @@ install_docker(){
 create_directories() {
     if [[ ! -e $REDASH_BASE_PATH ]]; then
         sudo mkdir -p $REDASH_BASE_PATH
-        sudo chown $USER:$USER $REDASH_BASE_PATH
+        sudo chown $USER $REDASH_BASE_PATH
     fi
 
     if [[ ! -e $REDASH_BASE_PATH/postgres-data ]]; then
@@ -52,13 +53,14 @@ create_config() {
 }
 
 setup_compose() {
-    REQUESTED_CHANNEL=stable
-    LATEST_VERSION=`curl -s "https://version.redash.io/api/releases?channel=$REQUESTED_CHANNEL"  | json_pp  | grep "docker_image" | head -n 1 | awk 'BEGIN{FS=":"}{print $3}' | awk 'BEGIN{FS="\""}{print $1}'`
+    # REQUESTED_CHANNEL=stable
+    # LATEST_VERSION=`curl -s "https://version.redash.io/api/releases?channel=$REQUESTED_CHANNEL"  | json_pp  | grep "docker_image" | head -n 1 | awk 'BEGIN{FS=":"}{print $3}' | awk 'BEGIN{FS="\""}{print $1}'`
 
     cd $REDASH_BASE_PATH
-    REDASH_BRANCH="${REDASH_BRANCH:-master}" # Default branch/version to master if not specified in REDASH_BRANCH env var
-    wget https://raw.githubusercontent.com/getredash/redash/${REDASH_BRANCH}/setup/docker-compose.yml
-    sed -ri "s/image: redash\/redash:([A-Za-z0-9.-]*)/image: redash\/redash:$LATEST_VERSION/" docker-compose.yml
+    cp ../docker-compose.yml ./docker-compose.yml
+    # REDASH_BRANCH="${REDASH_BRANCH:-master}" # Default branch/version to master if not specified in REDASH_BRANCH env var
+    # wget https://raw.githubusercontent.com/getredash/redash/${REDASH_BRANCH}/setup/docker-compose.yml
+    # sed -ri "s/image: redash\/redash:([A-Za-z0-9.-]*)/image: redash\/redash:$LATEST_VERSION/" docker-compose.yml
     echo "export COMPOSE_PROJECT_NAME=redash" >> ~/.profile
     echo "export COMPOSE_FILE=$REDASH_BASE_PATH/docker-compose.yml" >> ~/.profile
     export COMPOSE_PROJECT_NAME=redash
@@ -67,7 +69,7 @@ setup_compose() {
     sudo docker-compose up -d
 }
 
-install_docker
+# install_docker
 create_directories
 create_config
 setup_compose

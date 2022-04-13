@@ -21,3 +21,8 @@ See [Upgrade Guide](https://redash.io/help/open-source/admin-guide/how-to-upgrad
 ### How do I use `setup.sh` on a different operating system?
 
 You will need to update the `install_docker` function and maybe other functions as well.
+
+## Mac Setup
+
+1. `brew install pwgen`
+2. `./setup.sh`
