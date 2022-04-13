@@ -1,6 +1,6 @@
 import { find } from 'lodash';
 import moment from 'moment';
-import logoUrl from '@/assets/images/redash_icon_small.png';
+// import logoUrl from '@/assets/images/redash_icon_small.png';
 import template from './visualization-embed.html';
 
 const VisualizationEmbed = {
@@ -33,9 +33,10 @@ const VisualizationEmbed = {
     this.logoUrl = logoUrl;
     this.apiKey = $routeParams.api_key;
 
-    this.hideParametersUI = $routeParams.hide_parameters !== undefined;
+    const forInternalUse = $routeParams.internal !== undefined;
+    this.hideParametersUI = forInternalUse ? $routeParams.hide_parameters !== undefined: true;
     this.hideHeader = $routeParams.hide_header !== undefined;
-    this.hideQueryLink = $routeParams.hide_link !== undefined;
+    this.hideQueryLink = forInternalUse ? $routeParams.hide_link !== undefined: true;
 
     document.querySelector('body').classList.add('headless');
 
