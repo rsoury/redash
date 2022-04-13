@@ -1,10 +1,11 @@
 version: '2'
 x-redash-service: &redash-service
-  image: redash/redash:8.0.0.b32245
+  build:
+    context: ../
   depends_on:
     - postgres
     - redis
-  env_file: ./env
+  env_file: ./redash-data/env
   restart: always
 services:
   server:
@@ -37,9 +38,9 @@ services:
     restart: always
   postgres:
     image: postgres:9.5-alpine
-    env_file: ./env
+    env_file: ./redash-data/env
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - ./redash-data/postgres-data:/var/lib/postgresql/data
     restart: always
     ports:
       - "15432:5432"

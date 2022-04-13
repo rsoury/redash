@@ -28,3 +28,4 @@ client/cypress/screenshots
 client/cypress/videos
 
 setup/redash-setup
+setup/redash-data
